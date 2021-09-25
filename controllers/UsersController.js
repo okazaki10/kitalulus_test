@@ -2,7 +2,6 @@
 const axios = require('axios');
 
 let users = []
-let userDetail = {}
 
 const getUsers = async () => {
     try {
@@ -48,14 +47,3 @@ module.exports = {
     updateUser: updateUser,
     deleteUser: deleteUser
 }
-/*
-router.get('/detail/:name', async (req, res) => {
-    var resp = await getUsers('/users/' + req.params.name)
-    if (!resp.success) {
-        res.status(resp.errCode)
-    } else {
-        userDetail = resp.data
-    }
-    res.json(resp)
-})
-*/
