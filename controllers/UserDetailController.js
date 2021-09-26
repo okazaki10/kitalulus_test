@@ -3,9 +3,9 @@ const axios = require('axios');
 
 let userDetail = {}
 
-const getDetail = async (param) => {
+const getDetail = async (param,conf) => {
     try {
-        const response = await axios.get(global.URI + '/users/' + param)
+        const response = await axios.get(global.URI + '/users/' + param,conf)
         return { success: true, message: '', data: response.data }
     } catch (err) {
         console.log(err)
@@ -14,7 +14,13 @@ const getDetail = async (param) => {
 }
 
 const userDefault = async (req, res) => {
-    var resp = await getDetail('mojombo')
+    if (req.header('Authorization')) {
+        var resp = await getDetail('mojombo',{
+            headers: { 'Authorization': req.header('Authorization') }
+        })
+    } else {
+        var resp = await getDetail('mojombo')
+    }
     if (!resp.success) {
         res.status(resp.errCode)
     } else {
@@ -25,7 +31,13 @@ const userDefault = async (req, res) => {
 
 
 const index = async (req, res) => {
-    var resp = await getDetail(req.params.name)
+    if (req.header('Authorization')) {
+        var resp = await getDetail(req.params.name,{
+            headers: { 'Authorization': req.header('Authorization') }
+        })
+    } else {
+        var resp = await getDetail(req.params.name)
+    }
     if (!resp.success) {
         res.status(resp.errCode)
     } else {
@@ -36,7 +48,7 @@ const index = async (req, res) => {
 
 const updateUser = async (req, res) => {
 
-    userDetail = req.body 
+    userDetail = req.body
 
     res.json(userDetail)
 }

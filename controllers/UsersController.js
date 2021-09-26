@@ -3,9 +3,9 @@ const axios = require('axios');
 
 let users = []
 
-const getUsers = async () => {
+const getUsers = async (conf) => {
     try {
-        const response = await axios.get(global.URI + '/users')
+        const response = await axios.get(global.URI + '/users', conf)
         return { success: true, message: '', data: response.data }
     } catch (err) {
         console.log(err)
@@ -14,7 +14,13 @@ const getUsers = async () => {
 }
 
 const index = async (req, res) => {
-    var resp = await getUsers()
+    if (req.header('Authorization')) {
+        var resp = await getUsers({
+            headers: { 'Authorization': req.header('Authorization') }
+        })
+    } else {
+        var resp = await getUsers()
+    }
     users = resp.data
     res.json(resp)
 }
